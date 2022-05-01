@@ -36,7 +36,7 @@ int announce_Presence(int args, char * argv[],  User *buff) {
 	s = sendto(sdf, active, len +1, 0, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
 	if ( len + 1 != s)
 	    printf("%s\n", "Socket connection failed!");	
-	printf("%s %s\n",buff->status, buff->name);
+	//printf("%s %s\n",buff->status, buff->name);
 	
 }
 
@@ -130,8 +130,12 @@ int capture_Presence(int sfd, User  *buff, int *buf_size){
     			strcpy(buff[index].status, strtok(buf, " "));
     			snprintf(buff[index].name, BUFF_SIZE, "%s", strtok(NULL, " "));
     			snprintf(buff[index].host, BUFF_SIZE, "%s", strtok(NULL, " "));
+    			snprintf(buff[index].machine, BUFF_SIZE, "%s", host);
     			*(buf_size)+= 1;
     		}
+
+    		if(strcmp(buff[index].status, strtok(buf, " ")))
+    			strcpy(buff[index].status, strtok(buf, " "));
     		
 
     return index;

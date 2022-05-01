@@ -24,9 +24,9 @@ int main (int args, char *argv[]) {
 	pdf[1].events = POLLIN;
 	ndfs++;
 
-	//pdf[2].fd = tcp_Connect();
-	pdf[2].events = POLLIN | POLLHUP;
-	ndfs++;
+	//pdf[2].fd = Tcp_socket_client(online);
+	//pdf[2].events = POLLIN;
+	//ndfs++;
 
 	while(!end_Loop) {
 		pollReturn = poll(pdf, ndfs, 30000);
@@ -42,7 +42,7 @@ int main (int args, char *argv[]) {
 						end_Loop = true;
 						break;
 					}
-					if(connect_client(buff, online) == 0) {
+					if(connect_client(buff, online, user_Size) == 0) {
 						printf("The person is not online\n");
 					}
 					printf("buff= %s\n", buff);
@@ -52,6 +52,10 @@ int main (int args, char *argv[]) {
 					printf("%s %s\n", online[client].status,online[client].name);
 									
 			}	
+
+			if(pdf[2].revents & POLLIN) {
+				printf(" ready to send msg\n");
+			}
 		}
 	}
 	broadcast_Offline(pdf[1].fd, &online[0]);

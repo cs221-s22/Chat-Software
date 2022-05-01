@@ -15,7 +15,8 @@
      char status[BUFF_SIZE]; /* online or offline? */
      char name[BUFF_SIZE];   /* user name */
      char port[BUFF_SIZE];   /* TCP listener port */
-     char host[NI_MAXHOST]; /* host name */
+     char host[NI_MAXHOST]; /* host port number */
+     char machine [BUFF_SIZE];
  };
  typedef struct user User;
 
@@ -28,5 +29,6 @@ int broadcast_Offline(int sdf, User *buff);
 
 //client.c TCP
 int check_client(char *buffer, User *buff,int *buff_size);
-int connect_client(char *buff,User *online);
-int msg_client (int argc, char **argv);
+int connect_client(char *buff,User *online, int online_size);
+int msg_client (char *machine, char *port);
+int Tcp_socket_client(User * online);
