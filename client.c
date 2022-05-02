@@ -29,7 +29,7 @@ int connect_client(char *buff,User *online, int online_size){
 		name[i] = name[i+1];
 	}
 
-	snprintf(msg, BUFF_SIZE, "@%s %s",online[0].name, buff);
+	snprintf(msg, BUFF_SIZE, "from @%s to %s",online[0].name, buff);
 	for(int i = 0; i < online_size; i++) {
 		if(!strcmp(name, online[i].name)){
 			msg_client(online[i].machine, online[i].host, msg);

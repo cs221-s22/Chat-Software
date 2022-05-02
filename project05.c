@@ -11,7 +11,6 @@ int main (int args, char *argv[]) {
 	int store_size=0;
 	int readFile;
 	bool end_Loop = false;
-	//int count = 0;
 
 	announce_Presence(args, argv, &online[user_Size]);
 	user_Size++;
@@ -45,6 +44,7 @@ int main (int args, char *argv[]) {
 					if(connect_client(buff, online, user_Size) == 0) {
 						printf("The person is not online\n");
 					}
+					announce_Presence(args, argv, &online[0]);
 					//printf("buff= %s\n", buff);
 			} 
 			if(pdf[1].revents & POLLIN) {
