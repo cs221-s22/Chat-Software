@@ -9,6 +9,7 @@
 #include <poll.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/ioctl.h>
 #define BUFF_SIZE 64
 
  struct user {
@@ -30,5 +31,6 @@ int broadcast_Offline(int sdf, User *buff);
 //client.c TCP
 int check_client(char *buffer, User *buff,int *buff_size);
 int connect_client(char *buff,User *online, int online_size);
-int msg_client (char *machine, char *port);
+int msg_client (char *machine, char *port, char * buff);
 int Tcp_socket_client(User * online);
+int accept_client_msg(int sfd, User *online, int online_size);

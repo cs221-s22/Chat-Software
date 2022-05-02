@@ -20,12 +20,21 @@ int connect_client(char *buff,User *online, int online_size){
 	char name[BUFF_SIZE];
 	char cpy_buff[BUFF_SIZE];
 	strcpy(cpy_buff, buff);
+	char msg[BUFF_SIZE];
+
+	
 	snprintf(name, BUFF_SIZE, "%s", strtok(cpy_buff, " "));
-	strcpy(name, &name[1]);
+	int len = strlen(name);
+	for(int  i = 0; i < len; i++) {
+		name[i] = name[i+1];
+	}
+
+	snprintf(msg, BUFF_SIZE, "@%s %s",online[0].name, buff);
 	for(int i = 0; i < online_size; i++) {
 		if(!strcmp(name, online[i].name)){
-			msg_client(online[i].machine, online[i].host);
+			msg_client(online[i].machine, online[i].host, msg);
 			snprintf(online[0].port, BUFF_SIZE, "%s", online[i].host);
+			return 1;
 		}
 	}
 	
@@ -33,7 +42,7 @@ int connect_client(char *buff,User *online, int online_size){
 }
 
 
-int msg_client (char *machine, char *port) {
+int msg_client (char *machine, char *port, char *buff) {
 	struct addrinfo hints;
 	
 	memset(&hints, 0, sizeof(hints));
@@ -49,9 +58,8 @@ int msg_client (char *machine, char *port) {
 	if (connect(fd, res->ai_addr, res->ai_addrlen) != 0)
 	     perror("connect");
 	
-	char *msg = "test";
-	int len = strlen(msg) + 1;
-	if (send(fd, msg, len, 0) == -1)
+	int len = strlen(buff) + 1;
+	if (send(fd, buff, len, 0) == -1)
 	    perror("send");
 	
 	if (close(fd) == -1)
@@ -62,53 +70,57 @@ int msg_client (char *machine, char *port) {
 
 
 int Tcp_socket_client(User *online){
-	struct addrinfo hints;
-	struct addrinfo *result, *rp;
-	int sfd, s;
-	struct sockaddr_storage peer_addr;
-	
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;    // Allow IPv4 or IPv6
-	hints.ai_socktype = SOCK_STREAM; // Datagram socket
-	hints.ai_flags = AI_PASSIVE;    // Any IP address (DHCP)
-	hints.ai_protocol = 0;          // Any protocol
-	hints.ai_canonname = NULL;
-	hints.ai_addr = NULL;
-	hints.ai_next = NULL;
-	char port [BUFF_SIZE];
-	strcpy(port, online[0].host);
-	
-	    s = getaddrinfo(NULL, port, &hints, &result);
-	    if (s != 0) {
-	        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
-	        exit(EXIT_FAILURE);
+	int sockfd;
+	    struct sockaddr_in servaddr, cli;
+	    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	    
+	    if (sockfd == -1) {
+	        printf("socket creation failed...\n");
+	        exit(0);
 	    }
-	
-	    for (rp = result; rp != NULL; rp = rp->ai_next) {
-	        sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-	
-			int enable_broadcast = 1;
-	      	int rv = setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &enable_broadcast, sizeof(int));
-			if(rv == -1) {
-				perror("setsocketopt");
-			}
-	
-	        if (sfd == -1)
-	            continue;
-	
-	        if (bind(sfd, rp->ai_addr, rp->ai_addrlen) == 0)
-	            break;  // Success
-	
-	        close(sfd);
+
+	    servaddr.sin_family = AF_INET;
+	    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	    servaddr.sin_port = htons(atoi(online[0].host));
+
+	    if ((bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr))) != 0) {
+	           printf("socket bind failed...\n");
+	           exit(0);
 	    }
+	    if ((listen(sockfd, 5)) != 0) {
+	           printf("Listen failed...\n");
+	           exit(0);
+	    } 
+	    int enable = 1;
+	    ioctl(sockfd, FIONBIO, &enable); 
+
+
+	    return sockfd;       
+}
+
+int accept_client_msg(int sfd, User *online, int online_size){
+	struct sockaddr_in cli;
+	int connfd, len;
+	char buff[BUFF_SIZE];
+	char client_msg[BUFF_SIZE];
+	char cpybuf[BUFF_SIZE];
+	char name_token[BUFF_SIZE];
+
+	int  i = 0;
+		
 	
-	    freeaddrinfo(result);  // No longer needed
 	
-	    if (rp == NULL) {  // No address succeeded
-	        fprintf(stderr, "Could not bind\n");
-	        exit(EXIT_FAILURE);
-	    }
-	return sfd;
+	connfd = accept(sfd, (struct sockaddr*)&cli, &len);
+	 if (connfd < 0) {
+	      printf("server accept failed...\n");
+	      exit(0);
+	 }
+
+	 read(connfd, buff, sizeof(buff));
+	 printf("%s\n", buff);
+	 return 0;
+
+	  
 }
 
 

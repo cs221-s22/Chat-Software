@@ -24,9 +24,9 @@ int main (int args, char *argv[]) {
 	pdf[1].events = POLLIN;
 	ndfs++;
 
-	//pdf[2].fd = Tcp_socket_client(online);
-	//pdf[2].events = POLLIN;
-	//ndfs++;
+	pdf[2].fd = Tcp_socket_client(online);
+	pdf[2].events = POLLIN;
+	ndfs++;
 
 	while(!end_Loop) {
 		pollReturn = poll(pdf, ndfs, 30000);
@@ -45,7 +45,7 @@ int main (int args, char *argv[]) {
 					if(connect_client(buff, online, user_Size) == 0) {
 						printf("The person is not online\n");
 					}
-					printf("buff= %s\n", buff);
+					//printf("buff= %s\n", buff);
 			} 
 			if(pdf[1].revents & POLLIN) {
 				int client = capture_Presence(pdf[1].fd, online, &user_Size);
@@ -54,7 +54,7 @@ int main (int args, char *argv[]) {
 			}	
 
 			if(pdf[2].revents & POLLIN) {
-				printf(" ready to send msg\n");
+				accept_client_msg(pdf[2].fd, online, user_Size);
 			}
 		}
 	}
