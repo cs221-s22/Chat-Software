@@ -17,7 +17,7 @@
      char name[BUFF_SIZE];   /* user name */
      char port[BUFF_SIZE];   /* TCP listener port */
      char host[NI_MAXHOST]; /* host port number */
-     char machine [BUFF_SIZE];
+     char machine [BUFF_SIZE];/* the host machine*/
  };
  typedef struct user User;
 

@@ -5,7 +5,7 @@
 
 
 int announce_Presence(int args, char * argv[],  User *buff) {
-	if(args < 2) {
+	if (args < 2) {
 		return -1;
 	}
 	struct sockaddr_in serv_addr;
@@ -35,8 +35,7 @@ int announce_Presence(int args, char * argv[],  User *buff) {
 	len =  strlen(active);
 	s = sendto(sdf, active, len +1, 0, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
 	if ( len + 1 != s)
-	    printf("%s\n", "Socket connection failed!");	
-	//printf("%s %s\n",buff->status, buff->name);
+	    printf("%s\n", "Socket connection failed!");
 	
 }
 
@@ -106,7 +105,7 @@ int capture_Presence(int sfd, User  *buff, int *buf_size){
         (struct sockaddr *) &peer_addr, &peer_addr_len);
 
 
-        if(nread == 0) {
+        if (nread == 0) {
         	return -2;
         }
 
@@ -118,7 +117,7 @@ int capture_Presence(int sfd, User  *buff, int *buf_size){
         s = getnameinfo((struct sockaddr *) &peer_addr,
                 peer_addr_len, host, NI_MAXHOST,
                 service, NI_MAXSERV, NI_NUMERICSERV);
-        if(s != 0)
+        if (s != 0)
             fprintf(stderr, "getnameinfo: %s\n", gai_strerror(s));
 
         if (sendto(sfd, buf, nread, 0,(struct sockaddr *) &peer_addr, peer_addr_len) != nread)
@@ -126,7 +125,7 @@ int capture_Presence(int sfd, User  *buff, int *buf_size){
 
 
 	  		int index = check_client(buf, buff, buf_size); 
-	  		if(index == *buf_size){
+	  		if (index == *buf_size){
     			strcpy(buff[index].status, strtok(buf, " "));
     			snprintf(buff[index].name, BUFF_SIZE, "%s", strtok(NULL, " "));
     			snprintf(buff[index].host, BUFF_SIZE, "%s", strtok(NULL, " "));
@@ -134,7 +133,7 @@ int capture_Presence(int sfd, User  *buff, int *buf_size){
     			*(buf_size)+= 1;
     		}
 
-    		if(strcmp(buff[index].status, strtok(buf, " ")))
+    		if (strcmp(buff[index].status, strtok(buf, " ")))
     			strcpy(buff[index].status, strtok(buf, " "));
     		
 

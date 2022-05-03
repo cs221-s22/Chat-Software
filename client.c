@@ -8,7 +8,7 @@ int check_client(char *buffer, User *buff,int *buff_size){
 	strcpy(cpybuf, buffer);
 	strtok(cpybuf, " ");
 	snprintf(name_token, BUFF_SIZE, "%s", strtok(NULL, " "));
-	for(int i = 0; i < *buff_size; i++) {
+	for (int i = 0; i < *buff_size; i++) {
 		if(!strcmp(name_token, buff[i].name)){
 			printf("\n");
 			return i;
@@ -25,12 +25,12 @@ int connect_client(char *buff,User *online, int online_size){
 	
 	snprintf(name, BUFF_SIZE, "%s", strtok(cpy_buff, " "));
 	int len = strlen(name);
-	for(int  i = 0; i < len; i++) {
+	for (int  i = 0; i < len; i++) {
 		name[i] = name[i+1];
 	}
 
 	snprintf(msg, BUFF_SIZE, "from @%s to %s",online[0].name, buff);
-	for(int i = 0; i < online_size; i++) {
+	for (int i = 0; i < online_size; i++) {
 		if(!strcmp(name, online[i].name)){
 			msg_client(online[i].machine, online[i].host, msg);
 			snprintf(online[0].port, BUFF_SIZE, "%s", online[i].host);
