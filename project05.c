@@ -48,8 +48,8 @@ int main (int args, char *argv[]) {
 			} 
 			if (pdf[1].revents & POLLIN) {
 				int client = capture_Presence(pdf[1].fd, online, &user_Size);
-					printf("%s %s\n", online[client].status,online[client].name);
-									
+				printf("%s %s\n", online[client].status,online[client].name);
+											
 			}	
 
 			if (pdf[2].revents & POLLIN) {

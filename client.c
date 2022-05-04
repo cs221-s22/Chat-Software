@@ -21,6 +21,8 @@ int connect_client(char *buff,User *online, int online_size){
 	char cpy_buff[BUFF_SIZE];
 	strcpy(cpy_buff, buff);
 	char msg[BUFF_SIZE];
+	char cpy_buff_to_send[BUFF_SIZE];
+	int  i = 0;
 
 	
 	snprintf(name, BUFF_SIZE, "%s", strtok(cpy_buff, " "));
@@ -28,8 +30,17 @@ int connect_client(char *buff,User *online, int online_size){
 	for (int  i = 0; i < len; i++) {
 		name[i] = name[i+1];
 	}
-
-	snprintf(msg, BUFF_SIZE, "from @%s to %s",online[0].name, buff);
+	char * space = " ";
+	strcpy(cpy_buff_to_send, buff);
+	int size  = strlen(cpy_buff_to_send);
+	while(cpy_buff_to_send[0]!= ' '){
+		while(i < size){
+			cpy_buff_to_send[i] = cpy_buff_to_send[i+1];
+			i++;
+		}
+		i = 0;
+	}
+	snprintf(msg, BUFF_SIZE, "@%s%s",online[0].name, cpy_buff_to_send);
 	for (int i = 0; i < online_size; i++) {
 		if(!strcmp(name, online[i].name)){
 			msg_client(online[i].machine, online[i].host, msg);
