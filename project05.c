@@ -33,11 +33,10 @@ int main (int args, char *argv[]) {
 			announce_Presence(args, argv, &online[0]);
 		}
 
-		//for (int  i = 0; i < pollReturn; i++) {
 			if (pdf[0].revents & POLLIN) {
 					memset((void*)buff, 0, BUF_SIZE);
 					readFile = read(pdf[0].fd, (void*) buff, 50);
-					if(readFile == 0) {
+					if (readFile == 0) {
 						end_Loop = true;
 						break;
 					}
@@ -51,11 +50,9 @@ int main (int args, char *argv[]) {
 				printf("%s %s\n", online[client].status,online[client].name);
 											
 			}	
-
 			if (pdf[2].revents & POLLIN) {
 				accept_client_msg(pdf[2].fd, online, user_Size);
 			}
-		//}
 	}
 	broadcast_Offline(pdf[1].fd, &online[0]);
 

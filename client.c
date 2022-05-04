@@ -2,21 +2,21 @@
 
 
 
-int check_client(char *buffer, User *buff,int *buff_size){
+int check_client(char *buffer, User *buff,int *buff_size) {
 	char cpybuf[BUFF_SIZE];
 	char name_token[BUFF_SIZE];
 	strcpy(cpybuf, buffer);
 	strtok(cpybuf, " ");
 	snprintf(name_token, BUFF_SIZE, "%s", strtok(NULL, " "));
 	for (int i = 0; i < *buff_size; i++) {
-		if(!strcmp(name_token, buff[i].name)){
+		if(!strcmp(name_token, buff[i].name)) {
 			printf("\n");
 			return i;
 		}
 	}
 	return *buff_size;
 }
-int connect_client(char *buff,User *online, int online_size){
+int connect_client(char *buff,User *online, int online_size) {
 	char name[BUFF_SIZE];
 	char cpy_buff[BUFF_SIZE];
 	strcpy(cpy_buff, buff);
@@ -33,8 +33,8 @@ int connect_client(char *buff,User *online, int online_size){
 	char * space = " ";
 	strcpy(cpy_buff_to_send, buff);
 	int size  = strlen(cpy_buff_to_send);
-	while(cpy_buff_to_send[0]!= ' '){
-		while(i < size){
+	while(cpy_buff_to_send[0]!= ' ') {
+		while(i < size) {
 			cpy_buff_to_send[i] = cpy_buff_to_send[i+1];
 			i++;
 		}
@@ -42,7 +42,7 @@ int connect_client(char *buff,User *online, int online_size){
 	}
 	snprintf(msg, BUFF_SIZE, "@%s%s",online[0].name, cpy_buff_to_send);
 	for (int i = 0; i < online_size; i++) {
-		if(!strcmp(name, online[i].name)){
+		if(!strcmp(name, online[i].name)) {
 			msg_client(online[i].machine, online[i].host, msg);
 			snprintf(online[0].port, BUFF_SIZE, "%s", online[i].host);
 			return 1;
@@ -80,7 +80,7 @@ int msg_client (char *machine, char *port, char *buff) {
 }
 
 
-int Tcp_socket_client(User *online){
+int Tcp_socket_client(User *online) {
 	int sockfd;
 	    struct sockaddr_in servaddr, cli;
 	    sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -109,7 +109,7 @@ int Tcp_socket_client(User *online){
 	    return sockfd;       
 }
 
-int accept_client_msg(int sfd, User *online, int online_size){
+int accept_client_msg(int sfd, User *online, int online_size) {
 	struct sockaddr_in cli;
 	int connfd, len;
 	char buff[BUFF_SIZE];
